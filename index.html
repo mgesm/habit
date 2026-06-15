@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="habittrack">
-<title>habittrack</title>
+<meta name="apple-mobile-web-app-title" content="loopit">
+<title>loopit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -452,18 +452,85 @@ select.field-input option{background:var(--bg2);}
   font-weight:700;
   color:var(--accent);
 }
+
+  .ev-color-swatch{width:4px;height:36px;border-radius:3px;flex-shrink:0;margin-right:4px;}
+  .ev-habit-col{width:140px;}
+  .ev-row-label{gap:10px;}
+  @media(min-width:768px){
+    body{max-width:100%;flex-direction:row;}
+    .dt-sidebar{
+      width:220px;flex-shrink:0;height:100dvh;overflow-y:auto;
+      background:var(--bg2);border-right:0.5px solid var(--separator);
+      display:flex;flex-direction:column;
+      padding:calc(28px + var(--safe-top)) 0 24px;
+      position:sticky;top:0;
+    }
+    .dt-logo{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.5px;padding:0 22px 32px;}
+    .dt-logo span{color:var(--accent);}
+    .dt-nav{display:flex;flex-direction:column;gap:2px;}
+    .dt-nav-btn{
+      display:flex;align-items:center;gap:12px;padding:11px 22px;
+      cursor:pointer;font-size:14px;font-weight:600;color:var(--text3);
+      border:none;background:none;font-family:var(--font);
+      transition:all 0.15s;text-align:left;width:100%;
+    }
+    .dt-nav-btn:hover{color:var(--text);background:var(--bg3);}
+    .dt-nav-btn.active{color:var(--accent);}
+    .dt-nav-btn svg{width:18px;height:18px;flex-shrink:0;}
+    .dt-sidebar-bottom{margin-top:auto;padding:16px 22px 0;}
+    .dt-user-email{font-size:11px;color:var(--text3);word-break:break-all;margin-bottom:8px;}
+    .dt-signout-btn{
+      width:100%;padding:9px;border:none;border-radius:10px;
+      background:var(--bg3);color:var(--text3);
+      cursor:pointer;font-size:13px;font-weight:600;font-family:var(--font);
+      transition:all 0.15s;
+    }
+    .dt-signout-btn:hover{color:var(--red);}
+    .dt-content{flex:1;min-width:0;height:100dvh;overflow-y:auto;display:flex;flex-direction:column;}
+    .bottom-nav,.fab,.header{display:none!important;}
+    #todayView,#tabsView{display:flex!important;flex-direction:column;flex:1;}
+    .ev-header{padding-top:20px;}
+    .ev-habit-col{width:200px;}
+  }
 </style>
 </head>
 <body>
 
+<div id="dtSidebar" class="dt-sidebar" style="display:none">
+  <div class="dt-logo">loop<span>it</span></div>
+  <nav class="dt-nav">
+    <button class="dt-nav-btn active" id="dtBn0" onclick="dtSwitchView('today')">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20C21 20.55 20.55 21 20 21H15V15H9V21H4C3.45 21 3 20.55 3 20V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Hoy
+    </button>
+    <button class="dt-nav-btn" id="dtBn1" onclick="dtSwitchView('calendar')">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 9H21M8 2V6M16 2V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Calendario
+    </button>
+    <button class="dt-nav-btn" id="dtBn2" onclick="dtSwitchView('stats')">
+      <svg viewBox="0 0 24 24" fill="none"><polyline points="3,17 8,11 12,14 17,8 21,10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Estadísticas
+    </button>
+    <button class="dt-nav-btn" id="dtBn3" onclick="dtSwitchView('challenges')">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Retos
+    </button>
+    <button class="dt-nav-btn" id="dtBn4" onclick="dtSwitchView('settings')">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/></svg>Ajustes
+    </button>
+  </nav>
+  <div class="dt-sidebar-bottom">
+    <div class="dt-user-email" id="dtUserEmail"></div>
+    <button class="dt-signout-btn" onclick="signOut()">Cerrar sesión</button>
+  </div>
+</div>
+<div id="dtContent" class="dt-content" style="display:none">
+  <!-- desktop content injected here -->
+</div>
 <div class="loading-overlay" id="loadingOverlay"><div class="loading-logo">habit<span>track</span></div><div class="loading-dots"><div></div><div></div><div></div></div></div>
 
 <div class="auth-screen" id="authScreen">
   <div class="auth-orb auth-orb-1"></div><div class="auth-orb auth-orb-2"></div><div class="auth-orb auth-orb-3"></div>
   <div class="auth-logo-wrap">
-    <div class="auth-logo-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M6 24L12 16L18 20L26 10L30 14" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30" cy="14" r="2.5" fill="white"/></svg></div>
-    <div class="auth-logo">habit<span>track</span></div>
-    <div class="auth-sub">construye mejores hábitos</div>
+    <div class="auth-logo-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="10" stroke="white" stroke-width="2.5"/><circle cx="18" cy="18" r="4" fill="white"/><path d="M18 8V4M18 32V28M8 18H4M32 18H28" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div class="auth-logo">loop<span>it</span></div>
+    <div class="auth-sub">hábitos que perduran</div>
   </div>
   <div class="auth-glass-card">
     <div class="auth-glass-sheen"></div>
@@ -493,7 +560,7 @@ select.field-input option{background:var(--bg2);}
 </div>
 
 <div class="header" id="appHeader" style="display:none">
-  <div class="logo">habit<span>track</span></div>
+  <div class="logo">loop<span>it</span></div>
   <div class="header-right"><div class="sync-dot" id="syncDot"></div><div class="date-label" id="headerDate"></div></div>
 </div>
 
@@ -555,8 +622,6 @@ select.field-input option{background:var(--bg2);}
     <div class="modal-title" id="modalTitle">Nuevo hábito</div>
     <div class="field-label">Nombre</div>
     <input type="text" class="field-input" id="habitName" placeholder="ej: Meditar, Leer...">
-    <div class="field-label">Icono</div>
-    <div class="icon-grid" id="iconGrid"></div>
     <div class="field-label">Color</div>
     <div class="color-grid" id="colorGrid"></div>
     <div class="field-label">Tipo</div>
@@ -670,11 +735,11 @@ async function sendMagicLink(){
 function showApp(){
   document.getElementById('authScreen').style.display='none';
   document.getElementById('loadingOverlay').classList.remove('hidden');
-  document.getElementById('appHeader').style.display='flex';
-  document.getElementById('bottomNav').style.display='flex';
-  document.getElementById('fabBtn').classList.remove('fab-hidden');
   switchView('today');loadData();
-  setTimeout(function(){moveNavPill(0);},100);
+  setTimeout(function(){
+    applyLayout();
+    if(!IS_DESKTOP) moveNavPill(0);
+  },100);
 }
 function showAuth(){
   document.getElementById('loadingOverlay').classList.add('hidden');
@@ -767,7 +832,7 @@ var evSelectedDs=today();
 function getEvDays(){
   var days=[];
   var t=new Date();
-  for(var i=6;i>=0;i--){
+  for(var i=2;i>=0;i--){
     var d=new Date(t);d.setDate(t.getDate()-i);
     days.push({date:d,ds:dateStr(d)});
   }
@@ -809,27 +874,26 @@ function renderEverydayGrid(){
       var isToday=day.ds===todayDs;
       var isFuture=day.ds>todayDs;
       var note=notes[logKey(h.id,day.ds)];
-      var daysAgo=todayIdx-ci;
-      var opacity=done?(daysAgo===0?1:daysAgo<=2?0.82:daysAgo<=4?0.6:0.4):0;
+      var streak=getStreak(h.id);
+      var intensity=done?(streak===0?0.3:streak===1?0.42:streak<=3?0.58:streak<=7?0.74:streak<=14?0.87:streak<=30?0.95:1):0;
       var bg=done?h.color:'transparent';
       return '<div class="ev-cell'+(done?' done':'')+(isFuture?' future':'')+'" onclick="evToggle(\''+h.id+'\',\''+day.ds+'\')">'
-        +'<div class="ev-cell-inner" style="background:'+bg+';opacity:'+opacity+'"></div>'
+        +'<div class="ev-cell-inner" style="background:'+bg+';opacity:'+intensity+'"></div>'
         +(isToday?'<div class="ev-today-col-bg"></div>':'')
         +(note&&done?'<div class="ev-note-dot"></div>':'')
-        +'<div class="ev-cell-check">✓</div>'
         +'</div>';
     }).join('');
 
     var streak=getStreak(h.id);
-    var streakBadge=streak>=3?'<span style="font-size:10px;color:var(--amber);font-weight:700;display:block">🔥'+streak+'d</span>':'';
-    var negBadge=isNeg?'<span style="font-size:9px;color:var(--red);font-weight:700;display:block">EVITAR</span>':'';
+    var streakTxt=streak>=3?streak+'d 🔥':'';
+    var negTxt=isNeg?' EVITAR':'';
     return '<div class="ev-row">'
       +'<div class="ev-row-label" onclick="evOpenNote(\''+h.id+'\',\''+evSelectedDs+'\')">'
-      +'<span class="ev-habit-icon">'+h.icon+'</span>'
-      +'<div style="min-width:0"><div class="ev-habit-name">'+h.name+'</div>'
-      +(streakBadge+negBadge?'<div>'+streakBadge+negBadge+'</div>':'')
-      +'</div>'
-      +'</div>'
+      +'<div class="ev-color-swatch" style="background:'+h.color+'"></div>'
+      +'<div style="min-width:0">'
+      +'<div class="ev-habit-name">'+h.name+'</div>'
+      +((streakTxt||negTxt)?'<div style="font-size:10px;color:var(--text3);margin-top:1px">'+streakTxt+negTxt+'</div>':'')
+      +'</div></div>'
       +'<div class="ev-cells">'+cells+'</div>'
       +'</div>';
   }).join('');
@@ -884,7 +948,7 @@ function openNoteModal(e,hid,ds){
   e.stopPropagation();
   noteHabitId=hid;noteDate=ds;
   var h=habits.find(function(x){return x.id===hid;});
-  document.getElementById('noteModalTitle').textContent=(h?h.icon+' '+h.name:'')+'  —  nota del día';
+  document.getElementById('noteModalTitle').textContent=(h?h.name:'')+'  —  nota del día';
   var existing=notes[logKey(hid,ds)];
   document.getElementById('noteText').value=existing?existing.note:'';
   document.getElementById('noteMinutes').value=existing?existing.minutes||'':'';
@@ -957,7 +1021,7 @@ function renderCalendar(){
     for(var d=1;d<=totalDays;d++){var ds=calYear+'-'+pad(calMonth+1)+'-'+pad(d);if(habitApplies(h,ds)){if(isDone(h.id,ds))count++;possible++;}}
     var pct=possible?Math.round(count/possible*100):0;
     return '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--separator2)">'
-      +'<span style="font-size:20px">'+h.icon+'</span>'
+      +'<div style="width:4px;height:32px;border-radius:3px;background:'+h.color+';flex-shrink:0"></div>'
       +'<div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text)">'+h.name+'</div>'
       +'<div style="height:4px;background:var(--bg4);border-radius:2px;margin-top:5px"><div style="height:4px;background:'+h.color+';border-radius:2px;width:'+pct+'%"></div></div></div>'
       +'<div style="text-align:right"><div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--text)">'+count+'d</div><div style="font-size:11px;color:var(--text3)">'+pct+'%</div></div></div>';
@@ -997,7 +1061,7 @@ function renderStats(){
     var rate=getRate(h.id,30),streak=getStreak(h.id),best=getBestStreak(h.id);
     var totalMin=Object.entries(logs).filter(function(e){return e[0].startsWith(h.id+'_')&&e[1].minutes;}).reduce(function(s,e){return s+(e[1].minutes||0);},0);
     return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--separator2)">'
-      +'<span style="font-size:22px">'+h.icon+'</span>'
+      +'<div style="width:4px;height:36px;border-radius:3px;background:'+h.color+';flex-shrink:0"></div>'
       +'<div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text)">'+h.name+'</div>'
       +'<div style="height:4px;background:var(--bg4);border-radius:2px;margin-top:5px"><div style="height:4px;background:'+h.color+';border-radius:2px;width:'+rate+'%"></div></div></div>'
       +'<div style="text-align:right;flex-shrink:0">'
@@ -1116,7 +1180,6 @@ document.getElementById('modalBg').addEventListener('click',function(e){if(e.tar
 function openModal(){
   selIcon=ICONS[0];selColor=COLORS[0];selFreq='daily';selType='positive';selCustomDays=[1,2,3,4,5];
   document.getElementById('habitName').value='';document.getElementById('habitGoalMin').value='';document.getElementById('modalStatus').textContent='';
-  document.getElementById('iconGrid').innerHTML=ICONS.map(function(ic){return '<div class="icon-btn'+(ic===selIcon?' sel':'')+'" onclick="pickIcon(\''+ic+'\')">'+ic+'</div>';}).join('');
   document.getElementById('colorGrid').innerHTML=COLORS.map(function(c){return '<div class="color-dot'+(c===selColor?' sel':'')+'" style="background:'+c+'" onclick="pickColor(\''+c+'\')"></div>';}).join('');
   document.querySelectorAll('#typeGrid .freq-btn').forEach(function(b){b.classList.toggle('sel',b.dataset.type==='positive');});
   document.querySelectorAll('#freqGrid .freq-btn').forEach(function(b){b.classList.toggle('sel',b.dataset.freq==='daily');});
@@ -1150,7 +1213,7 @@ async function saveHabit(){
   var status=document.getElementById('modalStatus');
   if(!name){status.textContent='Escribe un nombre';status.className='modal-status status-err';return;}
   status.textContent='Guardando...';status.className='modal-status';setSync('syncing');
-  var habit={id:'h'+Date.now()+Math.random().toString(36).slice(2,5),name:name,icon:selIcon,color:selColor,frequency:selFreq,frequency_days:selFreq==='custom'?selCustomDays:(selFreq==='weekly'?[1]:null),habit_type:selType,goal_minutes:goalMin||null,archived:false,position:habits.length,user_id:currentUser.id};
+  var habit={id:'h'+Date.now()+Math.random().toString(36).slice(2,5),name:name,icon:'',color:selColor,frequency:selFreq,frequency_days:selFreq==='custom'?selCustomDays:(selFreq==='weekly'?[1]:null),habit_type:selType,goal_minutes:goalMin||null,archived:false,position:habits.length,user_id:currentUser.id};
   var r=await sb.from('habits').insert(habit).select();
   if(r.error){setSync('err');status.textContent='Error: '+r.error.message;status.className='modal-status status-err';return;}
   habits.push(r.data[0]||habit);setSync('ok');status.textContent='✓ Guardado';status.className='modal-status status-ok';
@@ -1158,6 +1221,103 @@ async function saveHabit(){
 }
 
 // ── BOOT ─────────────────────────────────────────────
+
+// ── DESKTOP ────────────────────────────────────────
+var IS_DESKTOP = window.innerWidth >= 768;
+
+function applyLayout(){
+  IS_DESKTOP = window.innerWidth >= 768;
+  if(IS_DESKTOP){
+    document.getElementById('dtSidebar').style.display='flex';
+    document.getElementById('dtContent').style.display='flex';
+    document.getElementById('appHeader').style.display='none';
+    document.getElementById('bottomNav').style.display='none';
+    document.getElementById('fabBtn').style.display='none';
+    // Move views into dtContent
+    var dtc = document.getElementById('dtContent');
+    dtc.innerHTML = '';
+    // Add FAB inside dtContent for desktop
+    var fab = document.createElement('button');
+    fab.className = 'fab';
+    fab.id = 'fabBtnDt';
+    fab.textContent = '+';
+    fab.onclick = openModal;
+    fab.style.cssText = 'position:fixed;bottom:32px;right:32px;transform:none;';
+    dtc.appendChild(fab);
+    // Show today view inside dtContent
+    dtSwitchView(mainView==='tabs'?activeTab:'today');
+    if(currentUser){
+      var em=document.getElementById('dtUserEmail');
+      if(em) em.textContent=currentUser.email||'';
+    }
+  } else {
+    document.getElementById('dtSidebar').style.display='none';
+    document.getElementById('dtContent').style.display='none';
+    document.getElementById('appHeader').style.display='flex';
+    document.getElementById('bottomNav').style.display='flex';
+    document.getElementById('fabBtn').style.display='';
+  }
+}
+
+function dtSwitchView(v){
+  // Update sidebar active
+  ['today','calendar','stats','challenges','settings'].forEach(function(n,i){
+    var btn=document.getElementById('dtBn'+i);
+    if(btn) btn.classList.toggle('active', n===v || (v==='today'&&i===0));
+  });
+  var dtc = document.getElementById('dtContent');
+  if(!dtc) return;
+  // Clear old fab if any
+  var oldFab = document.getElementById('fabBtnDt');
+  // Create content wrapper
+  var wrapper = document.createElement('div');
+  wrapper.style.cssText = 'flex:1;display:flex;flex-direction:column;min-height:0;';
+  if(v==='today'){
+    mainView='today';
+    wrapper.appendChild(document.getElementById('todayView'));
+    document.getElementById('todayView').style.display='flex';
+    document.getElementById('todayView').style.flexDirection='column';
+    document.getElementById('todayView').style.flex='1';
+    document.getElementById('tabsView').style.display='none';
+    // FAB
+    if(!document.getElementById('fabBtnDt')){
+      var fab2=document.createElement('button');
+      fab2.className='fab';fab2.id='fabBtnDt';fab2.textContent='+';
+      fab2.onclick=openModal;fab2.style.cssText='position:fixed;bottom:32px;right:32px;transform:none;display:flex;';
+      document.body.appendChild(fab2);
+    } else document.getElementById('fabBtnDt').style.display='flex';
+    dtc.innerHTML='';dtc.appendChild(document.getElementById('todayView'));
+    renderEverydayGrid();
+  } else {
+    mainView='tabs';activeTab=v;
+    if(document.getElementById('fabBtnDt')) document.getElementById('fabBtnDt').style.display='none';
+    document.getElementById('todayView').style.display='none';
+    document.getElementById('tabsView').style.display='none';
+    dtc.innerHTML='<div style="flex:1;overflow-y:auto;padding:0;" id="dtTabWrap"></div>';
+    var tw=document.getElementById('dtTabWrap');
+    if(v==='calendar') renderCalendar_dt(tw);
+    else if(v==='stats'){tw.innerHTML='<div class="stats-content" id="tabContent"></div>';renderStats();}
+    else if(v==='challenges'){tw.innerHTML='<div id="tabContent"></div>';renderChallenges();}
+    else if(v==='settings'){tw.innerHTML='<div id="tabContent"></div>';renderSettings();}
+  }
+}
+
+function renderCalendar_dt(el){
+  // Reuse calendar but inject into el
+  var oldTC = document.getElementById('tabContent');
+  var div = document.createElement('div');
+  div.id='tabContent';
+  el.appendChild(div);
+  if(oldTC && oldTC !== div) oldTC.id='tabContent_old';
+  activeTab='calendar';
+  renderCalendar();
+}
+
+window.addEventListener('resize', function(){
+  var nowDt = window.innerWidth >= 768;
+  if(nowDt !== IS_DESKTOP && currentUser){ applyLayout(); }
+});
+
 document.getElementById('authEmail').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('authPass').focus();});
 document.getElementById('authPass').addEventListener('keydown',function(e){if(e.key==='Enter')submitAuth();});
 
