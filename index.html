@@ -247,6 +247,211 @@ select.field-input option{background:var(--bg2);}
 .btn-save{flex:2;padding:13px;border:none;border-radius:12px;background:var(--accent);color:#fff;cursor:pointer;font-size:16px;font-weight:700;font-family:var(--font);transition:opacity 0.15s;}
 .btn-save:active{opacity:0.85;}
 .modal-status{font-size:13px;font-weight:500;text-align:center;padding:6px 0;min-height:20px;}
+
+/* ── EVERYDAY-STYLE GRID ─────────────────────────── */
+.ev-header{
+  display:flex;
+  align-items:center;
+  padding:calc(8px + var(--safe-top)) 0 0;
+  border-bottom:0.5px solid var(--separator2);
+}
+.ev-habit-col{
+  width:120px;
+  flex-shrink:0;
+  padding:0 16px;
+}
+.ev-days-header{
+  flex:1;
+  display:flex;
+  min-width:0;
+}
+.ev-day-head{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:8px 0 10px;
+  gap:4px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.ev-day-name{
+  font-size:10px;
+  font-weight:700;
+  color:var(--text3);
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+}
+.ev-day-num{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--mono);
+  font-size:15px;
+  font-weight:700;
+  color:var(--text2);
+  transition:all 0.15s;
+}
+.ev-day-head.today .ev-day-num{
+  background:var(--accent);
+  color:#fff;
+}
+.ev-day-head.selected .ev-day-num{
+  background:var(--bg3);
+  color:var(--text);
+}
+
+/* Grid rows */
+.ev-grid{
+  flex:1;
+  overflow-y:auto;
+  padding-bottom:8px;
+}
+.ev-row{
+  display:flex;
+  align-items:stretch;
+  border-bottom:0.5px solid var(--separator2);
+  min-height:52px;
+}
+.ev-row-label{
+  width:120px;
+  flex-shrink:0;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+}
+.ev-habit-icon{font-size:18px;flex-shrink:0;}
+.ev-habit-name{
+  font-size:14px;
+  font-weight:600;
+  color:var(--text);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.ev-cells{flex:1;display:flex;}
+.ev-cell{
+  flex:1;
+  cursor:pointer;
+  position:relative;
+  transition:opacity 0.15s;
+  -webkit-tap-highlight-color:transparent;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ev-cell:active{opacity:0.7;}
+.ev-cell.done{/* color set inline */}
+.ev-cell.empty{background:transparent;}
+.ev-cell.today-col{/* highlight border */}
+.ev-cell-inner{
+  width:100%;
+  height:100%;
+  position:absolute;
+  inset:0;
+}
+.ev-cell-check{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:700;
+  color:rgba(255,255,255,0.7);
+  opacity:0;
+  transition:opacity 0.2s;
+}
+.ev-cell.done .ev-cell-check{opacity:1;}
+.ev-cell.future{opacity:0.3;pointer-events:none;}
+
+/* Today column highlight */
+.ev-today-col-bg{
+  position:absolute;
+  inset:0;
+  background:rgba(52,199,89,0.06);
+  pointer-events:none;
+}
+
+/* Totals row */
+.ev-totals-row{
+  display:flex;
+  align-items:center;
+  padding:10px 0 calc(10px + var(--safe-bottom));
+  border-top:0.5px solid var(--separator2);
+}
+.ev-totals{flex:1;display:flex;}
+.ev-total-cell{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ev-total-pill{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:1.5px solid var(--separator);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:700;
+  color:var(--text3);
+  transition:all 0.2s;
+}
+.ev-total-pill.has-all{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:rgba(52,199,89,0.1);
+}
+.ev-total-pill.has-some{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+
+/* Note indicator */
+.ev-note-dot{
+  position:absolute;
+  top:4px;
+  right:4px;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.5);
+}
+
+/* Selected day info panel */
+.ev-day-panel{
+  padding:12px 16px;
+  background:var(--bg2);
+  border-bottom:0.5px solid var(--separator2);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.ev-day-panel-label{
+  font-size:14px;
+  font-weight:600;
+  color:var(--text);
+}
+.ev-day-panel-sub{
+  font-size:12px;
+  color:var(--text3);
+  margin-top:1px;
+}
+.ev-day-panel-pct{
+  font-family:var(--mono);
+  font-size:22px;
+  font-weight:700;
+  color:var(--accent);
+}
 </style>
 </head>
 <body>
@@ -293,17 +498,18 @@ select.field-input option{background:var(--bg2);}
 </div>
 
 <div id="todayView" style="display:none">
-  <div class="date-nav">
-    <button class="nav-btn" id="prevDay">&#8249;</button>
-    <div class="day-display"><div class="day-name" id="dayName"></div><div class="day-date" id="dayDate"></div></div>
-    <button class="nav-btn" id="nextDay">&#8250;</button>
+  <!-- Everyday-style grid header -->
+  <div class="ev-header">
+    <div class="ev-habit-col"></div>
+    <div class="ev-days-header" id="evDaysHeader"></div>
   </div>
-  <div class="week-strip" id="weekStrip"></div>
-  <div class="progress-section">
-    <div class="progress-top"><span class="progress-label" id="progressLabel">0 de 0</span><span class="progress-count" id="progressPct">0%</span></div>
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+  <!-- Grid rows per habit -->
+  <div class="ev-grid" id="evGrid"></div>
+  <!-- Day totals row -->
+  <div class="ev-totals-row">
+    <div class="ev-habit-col"></div>
+    <div class="ev-totals" id="evTotals"></div>
   </div>
-  <div class="habits-list" id="habitsList"></div>
 </div>
 
 <div id="tabsView" style="display:none;flex-direction:column;flex:1;">
@@ -505,7 +711,8 @@ async function loadData(){
 function renderAll(){
   var now=new Date();
   document.getElementById('headerDate').textContent=DAYS[now.getDay()].slice(0,3)+' '+now.getDate();
-  renderDayView();
+  evSelectedDs=today();
+  renderEverydayGrid();
   if(mainView==='tabs')renderTab();
 }
 
@@ -554,69 +761,104 @@ function renderTab(){
 }
 
 // ── DAY VIEW ─────────────────────────────────────────
-function renderDayView(){
-  var ds=dateStr(viewDate);
-  document.getElementById('dayName').textContent=DAYS[viewDate.getDay()];
-  document.getElementById('dayDate').textContent=viewDate.getDate()+' de '+MONTHS[viewDate.getMonth()]+' '+viewDate.getFullYear();
-  renderWeekStrip();
-  var dayHabits=habits.filter(function(h){return habitApplies(h,ds);});
-  var done=dayHabits.filter(function(h){return isDone(h.id,ds);}).length;
-  var total=dayHabits.length;
-  var pct=total?Math.round(done/total*100):0;
-  document.getElementById('progressLabel').textContent=done+' de '+total+' completados';
-  document.getElementById('progressPct').textContent=pct+'%';
-  document.getElementById('progressBar').style.width=pct+'%';
-  var el=document.getElementById('habitsList');
-  if(!habits.length){el.innerHTML='<div class="empty-habits">Sin hábitos todavía<br><small style="font-size:13px;color:var(--text3)">Pulsa + para añadir el primero</small></div>';return;}
-  el.innerHTML=dayHabits.map(function(h){
-    var d=isDone(h.id,ds),s=getStreak(h.id),isNeg=h.habit_type==='negative';
-    var logEntry=logs[logKey(h.id,ds)];
-    var minutes=logEntry&&logEntry.minutes?logEntry.minutes:0;
-    var note=notes[logKey(h.id,ds)];
-    var streakTxt=isNeg?(s>0?(s>=3?'🔥 '+s+' días sin hacerlo':'✓ '+s+' días'):''):(s>0?(s>=3?'🔥 '+s+'d':'▸ '+s+'d'):'');
-    var typeBadge=isNeg?'<span class="habit-type-badge" style="background:rgba(255,59,48,0.15);color:var(--red)">evitar</span>':'';
-    var goalMin=h.goal_minutes||0;
-    var minTxt=minutes>0?'<span style="color:var(--blue)">⏱ '+fmt(minutes)+'</span>':'';
-    var noteInd=note?'<span style="color:var(--accent)">📝</span>':'';
-    var checkStyle=d?(isNeg?'background:#FF3B30;color:#fff;border-color:transparent':'background:'+h.color+';color:#fff;border-color:transparent'):'';
-    return '<div class="habit-item'+(d?' done':'')+'" id="hi_'+h.id+'" onclick="toggleHabit(\''+h.id+'\')" style="position:relative">'
-      +'<div class="habit-check" style="'+checkStyle+'">'+(d?'✓':'')+'</div>'
-      +'<div class="habit-info">'
-      +'<div class="habit-name">'+h.name+'</div>'
-      +'<div class="habit-meta">'+typeBadge+(streakTxt?'<span class="habit-streak-badge">'+streakTxt+'</span>':'')+minTxt+noteInd+'</div>'
-      +'</div>'
-      +'<span style="font-size:22px;flex-shrink:0">'+h.icon+'</span>'
-      +'<button class="habit-note-btn" onclick="openNoteModal(event,\''+h.id+'\',\''+ds+'\')">📝</button>'
+// ── EVERYDAY GRID ────────────────────────────────
+var evSelectedDs=today();
+
+function getEvDays(){
+  var days=[];
+  var t=new Date();
+  for(var i=6;i>=0;i--){
+    var d=new Date(t);d.setDate(t.getDate()-i);
+    days.push({date:d,ds:dateStr(d)});
+  }
+  return days;
+}
+
+function renderEverydayGrid(){
+  var days=getEvDays();
+  var todayDs=today();
+  var todayIdx=days.findIndex(function(d){return d.ds===todayDs;});
+
+  // Header
+  var daysHeaderEl=document.getElementById('evDaysHeader');
+  if(!daysHeaderEl)return;
+  daysHeaderEl.innerHTML=days.map(function(day){
+    var isToday=day.ds===todayDs;
+    var isSel=day.ds===evSelectedDs;
+    return '<div class="ev-day-head'+(isToday?' today':isSel?' selected':'')+'" onclick="evSelectDay(\''+day.ds+'\')">'
+      +'<span class="ev-day-name">'+DSHORT[day.date.getDay()]+'</span>'
+      +'<div class="ev-day-num">'+day.date.getDate()+'</div>'
       +'</div>';
   }).join('');
-}
 
-function renderWeekStrip(){
-  var ds=dateStr(viewDate),html='';
-  var start=new Date(viewDate);start.setDate(start.getDate()-3);
-  for(var i=0;i<7;i++){
-    var d=new Date(start);d.setDate(start.getDate()+i);
-    var dds=dateStr(d),isActive=dds===ds;
-    var dayHabits=habits.filter(function(h){return habitApplies(h,dds);});
-    var doneCount=dayHabits.filter(function(h){return isDone(h.id,dds);}).length;
-    var pct=dayHabits.length?doneCount/dayHabits.length:0;
-    var dotColor=pct===1?'var(--green)':pct>0?'var(--amber)':'var(--bg4)';
-    html+='<div class="week-day'+(isActive?' active':'')+'" onclick="goToDate(\''+dds+'\')">'
-      +'<span class="wd-name">'+DSHORT[d.getDay()]+'</span>'
-      +'<span class="wd-num">'+d.getDate()+'</span>'
-      +'<div class="wd-dot" style="background:'+dotColor+'"></div></div>';
+  // Grid
+  var gridEl=document.getElementById('evGrid');
+  if(!gridEl)return;
+  if(!habits.length){
+    gridEl.innerHTML='<div style="padding:48px 16px;text-align:center;color:var(--text3);font-size:15px;font-weight:500">Sin hábitos todavía<br><small style="font-size:13px">Pulsa + para añadir el primero</small></div>';
+    document.getElementById('evTotals').innerHTML='';
+    return;
   }
-  document.getElementById('weekStrip').innerHTML=html;
+
+  gridEl.innerHTML=habits.map(function(h){
+    var isNeg=h.habit_type==='negative';
+    var cells=days.map(function(day,ci){
+      var applies=habitApplies(h,day.ds);
+      if(!applies)return '<div class="ev-cell"><div class="ev-cell-inner" style="background:var(--bg2)"></div></div>';
+      var done=isDone(h.id,day.ds);
+      var isToday=day.ds===todayDs;
+      var isFuture=day.ds>todayDs;
+      var note=notes[logKey(h.id,day.ds)];
+      var daysAgo=todayIdx-ci;
+      var opacity=done?(daysAgo===0?1:daysAgo<=2?0.82:daysAgo<=4?0.6:0.4):0;
+      var bg=done?h.color:'transparent';
+      return '<div class="ev-cell'+(done?' done':'')+(isFuture?' future':'')+'" onclick="evToggle(\''+h.id+'\',\''+day.ds+'\')">'
+        +'<div class="ev-cell-inner" style="background:'+bg+';opacity:'+opacity+'"></div>'
+        +(isToday?'<div class="ev-today-col-bg"></div>':'')
+        +(note&&done?'<div class="ev-note-dot"></div>':'')
+        +'<div class="ev-cell-check">✓</div>'
+        +'</div>';
+    }).join('');
+
+    var streak=getStreak(h.id);
+    var streakBadge=streak>=3?'<span style="font-size:10px;color:var(--amber);font-weight:700;display:block">🔥'+streak+'d</span>':'';
+    var negBadge=isNeg?'<span style="font-size:9px;color:var(--red);font-weight:700;display:block">EVITAR</span>':'';
+    return '<div class="ev-row">'
+      +'<div class="ev-row-label" onclick="evOpenNote(\''+h.id+'\',\''+evSelectedDs+'\')">'
+      +'<span class="ev-habit-icon">'+h.icon+'</span>'
+      +'<div style="min-width:0"><div class="ev-habit-name">'+h.name+'</div>'
+      +(streakBadge+negBadge?'<div>'+streakBadge+negBadge+'</div>':'')
+      +'</div>'
+      +'</div>'
+      +'<div class="ev-cells">'+cells+'</div>'
+      +'</div>';
+  }).join('');
+
+  // Totals
+  var totalsEl=document.getElementById('evTotals');
+  if(totalsEl){
+    totalsEl.innerHTML=days.map(function(day){
+      var dayH=habits.filter(function(h){return habitApplies(h,day.ds);});
+      var doneCount=dayH.filter(function(h){return isDone(h.id,day.ds);}).length;
+      var allDone=dayH.length>0&&doneCount===dayH.length;
+      var someDone=doneCount>0&&!allDone;
+      return '<div class="ev-total-cell">'
+        +'<div class="ev-total-pill'+(allDone?' has-all':someDone?' has-some':'')+'">'
+        +(doneCount>0?doneCount:'')+'</div></div>';
+    }).join('');
+  }
 }
 
-function goToDate(ds){viewDate=new Date(ds+'T12:00:00');renderDayView();}
-document.getElementById('prevDay').onclick=function(){viewDate.setDate(viewDate.getDate()-1);renderDayView();};
-document.getElementById('nextDay').onclick=function(){viewDate.setDate(viewDate.getDate()+1);renderDayView();};
+function renderDayView(){renderEverydayGrid();}
 
-async function toggleHabit(hid){
-  var ds=dateStr(viewDate),key=logKey(hid,ds),existing=logs[key];
-  var h=habits.find(function(x){return x.id===hid;});
-  var isNeg=h&&h.habit_type==='negative';
+function renderWeekStrip(){}
+
+function evSelectDay(ds){evSelectedDs=ds;renderEverydayGrid();}
+
+function goToDate(ds){evSelectedDs=ds;renderEverydayGrid();}
+
+async function evToggle(hid,ds){
+  var key=logKey(hid,ds),existing=logs[key];
   setSync('syncing');
   if(existing){
     delete logs[key];
@@ -626,7 +868,15 @@ async function toggleHabit(hid){
     logs[key]=entry;
     await sb.from('habit_logs').upsert(entry,{onConflict:'habit_id,date'});
   }
-  setSync('ok');renderDayView();if(mainView==='tabs')renderTab();
+  setSync('ok');
+  renderEverydayGrid();
+  if(mainView==='tabs')renderTab();
+}
+
+async function toggleHabit(hid){await evToggle(hid,evSelectedDs);}
+
+function evOpenNote(hid,ds){
+  openNoteModal({stopPropagation:function(){}},hid,ds);
 }
 
 // ── NOTES ────────────────────────────────────────────
@@ -651,7 +901,7 @@ async function saveNote(){
   if(logs[key]){logs[key].minutes=minutes;await sb.from('habit_logs').update({minutes:minutes}).eq('habit_id',noteHabitId).eq('date',noteDate);}
   if(text){notes[key]=entry;await sb.from('habit_notes').upsert(entry,{onConflict:'habit_id,date'});}
   else{delete notes[key];await sb.from('habit_notes').delete().eq('habit_id',noteHabitId).eq('date',noteDate);}
-  closeNoteModal();renderDayView();
+  closeNoteModal();renderEverydayGrid();if(mainView==='tabs')renderTab();
 }
 document.getElementById('noteModalBg').addEventListener('click',function(e){if(e.target===document.getElementById('noteModalBg'))closeNoteModal();});
 
